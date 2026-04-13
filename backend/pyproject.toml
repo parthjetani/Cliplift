@@ -1,0 +1,92 @@
+[project]
+name = "cliplift-backend"
+version = "0.1.0"
+description = "Cliplift backend API — short-form video analytics + publishing"
+requires-python = ">=3.12"
+dependencies = [
+    # Web framework
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+
+    # Settings + validation
+    "pydantic[email]>=2.9.0",
+    "pydantic-settings>=2.6.0",
+
+    # Database
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "alembic>=1.14.0",
+
+    # Auth (Supabase JWT validation)
+    "pyjwt[crypto]>=2.10.0",
+
+    # HTTP client (data provider adapters)
+    "httpx>=0.28.0",
+
+    # Encryption (OAuth tokens at rest)
+    "cryptography>=44.0.0",
+
+    # Rate limiting (with local fallback)
+    "cachetools>=5.5.0",
+
+    # Stripe
+    "stripe>=11.4.0",
+
+    # AI content briefs
+    "anthropic>=0.40.0",
+
+    # Observability
+    "sentry-sdk[fastapi]>=2.19.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "httpx>=0.28.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "RUF", # ruff-specific
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # function calls in defaults (FastAPI Depends pattern)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true

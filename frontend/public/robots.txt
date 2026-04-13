@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /compare/virlo
+Allow: /discover
+
+Disallow: /dashboard/
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+
+Sitemap: https://cliplift.com/sitemap.xml

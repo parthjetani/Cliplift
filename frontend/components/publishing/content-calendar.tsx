@@ -29,7 +29,7 @@ const statusDot: Record<PostStatus, string> = {
   draft: "bg-slate-400",
   scheduled: "bg-blue-500",
   publishing: "bg-amber-500 animate-pulse",
-  published: "bg-green-500",
+  published: "bg-brand-teal-500",
   failed: "bg-red-500",
 };
 

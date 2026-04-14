@@ -135,9 +135,9 @@ export default function PostDetailPage() {
 
       {/* Status banner */}
       {post.status === "published" && (
-        <Card className="mb-4 border-green-500/40 bg-green-500/5">
+        <Card className="mb-4 border-brand-teal-500/40 bg-brand-teal-500/5">
           <CardContent className="flex items-start gap-3 p-4">
-            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
+            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-brand-teal-600" />
             <div className="flex-1">
               <p className="text-sm font-medium">
                 Published{publishedAt && ` ${publishedAt.toLocaleString()}`}

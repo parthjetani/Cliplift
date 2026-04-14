@@ -232,7 +232,7 @@ function BriefSection({
             className="ml-auto text-muted-foreground hover:text-foreground"
           >
             {copied ? (
-              <Check className="h-3 w-3 text-green-600" />
+              <Check className="h-3 w-3 text-brand-teal-600" />
             ) : (
               <Copy className="h-3 w-3" />
             )}

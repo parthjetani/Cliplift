@@ -34,7 +34,7 @@ export function VideoCard({ video, dbVideoId }: VideoCardProps) {
     <Card
       className={cn(
         "group overflow-hidden transition-all hover:shadow-lg",
-        video.is_outlier && "ring-2 ring-green-500/50"
+        video.is_outlier && "ring-2 ring-brand-teal-500/50"
       )}
     >
       {/* Thumbnail */}

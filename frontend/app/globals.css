@@ -4,48 +4,97 @@
 
 @layer base {
   :root {
+    /* --- Cliplift brand: Indigo primary + Teal accent + Slate neutral --- */
+
+    /* Page background */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222 47% 11%;
+
+    /* Cards, modals, dropdowns */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary: Indigo 500 (#6366F1) — buttons, links, sidebar active */
+    --primary: 239 84% 67%;
+    --primary-foreground: 226 100% 97%;
+
+    /* Secondary: Slate 100 — muted backgrounds */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted: Slate 100/500 */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    /* Accent: Teal 600 (#0D9488) — outlier badges, publish CTAs */
+    --accent: 173 80% 32%;
+    --accent-foreground: 166 76% 97%;
+
+    /* Destructive: Red 500 — errors only */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+
+    /* Borders & inputs */
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+
+    /* Focus ring: matches primary (Indigo) */
+    --ring: 239 84% 67%;
+
     --radius: 0.5rem;
+
+    /* --- Extended brand tokens (custom, not shadcn) --- */
+    --brand-indigo: 239 84% 67%;
+    --brand-teal: 173 80% 32%;
+    --brand-indigo-light: 224 100% 95%;
+    --brand-teal-light: 166 76% 97%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Page background: Slate 900 */
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+
+    /* Cards: Slate 800 */
+    --card: 217 33% 17%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 217 33% 17%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+
+    /* Primary: Indigo 400 (lighter for dark bg) */
+    --primary: 239 84% 74%;
+    --primary-foreground: 222 47% 11%;
+
+    /* Secondary: Slate 700 */
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
+
+    /* Muted: Slate 700/400 */
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    /* Accent: Teal 500 (lighter for dark bg) */
+    --accent: 173 58% 39%;
+    --accent-foreground: 166 76% 97%;
+
+    /* Destructive: Red 600 */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+
+    /* Borders: Slate 700 */
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+
+    /* Focus ring: Indigo 400 */
+    --ring: 239 84% 74%;
+
+    /* Extended brand tokens */
+    --brand-indigo: 239 84% 74%;
+    --brand-teal: 173 58% 39%;
+    --brand-indigo-light: 232 45% 20%;
+    --brand-teal-light: 176 45% 15%;
   }
 }
 
@@ -53,8 +102,31 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth color transitions when toggling themes */
+  *,
+  *::before,
+  *::after {
+    transition-property: background-color, border-color, color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+
+  /* Opt out of transition for elements that shouldn't animate */
+  .no-theme-transition,
+  .no-theme-transition *,
+  [data-sonner-toaster] * {
+    transition-property: none !important;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }

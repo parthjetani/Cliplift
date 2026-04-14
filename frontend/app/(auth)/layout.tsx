@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+
+import { Logo } from "@/components/brand/logo";
 
 export default function AuthLayout({
   children,
@@ -11,8 +12,7 @@ export default function AuthLayout({
       <header className="border-b">
         <div className="container flex h-16 items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-lg font-bold tracking-tight">Cliplift</span>
+            <Logo variant="wordmark" size="md" />
           </Link>
         </div>
       </header>

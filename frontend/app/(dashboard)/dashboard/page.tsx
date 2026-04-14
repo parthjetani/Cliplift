@@ -232,7 +232,7 @@ function AnalyticsDashboard({
                   <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
                     <span>{formatCompact(outlier.views)} views</span>
                     <span>·</span>
-                    <span className="font-medium text-green-600">
+                    <span className="font-medium text-brand-teal-600">
                       {outlier.outlier_score.toFixed(1)}σ outlier
                     </span>
                     <span>·</span>

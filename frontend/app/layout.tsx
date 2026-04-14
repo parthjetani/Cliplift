@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -24,6 +25,13 @@ export const metadata: Metadata = {
       "Track viral content across YouTube, Instagram, LinkedIn, and TikTok. Flat rate. No credits.",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -33,17 +41,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/*
-        suppressHydrationWarning on <body> silences false positives from
-        browser extensions (Grammarly, Dark Reader, LastPass, etc.) that
-        inject attributes into the body before React loads.
-      */}
       <body
-        className="min-h-screen bg-background font-sans antialiased"
+        className="min-h-screen bg-background font-sans antialiased transition-colors duration-300"
         suppressHydrationWarning
       >
-        {children}
-        <Toaster />
+        <ThemeProvider>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

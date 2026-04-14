@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+
+import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 export default function MarketingLayout({
   children,
@@ -12,8 +14,7 @@ export default function MarketingLayout({
       <header className="border-b bg-background/80 backdrop-blur">
         <div className="container flex h-14 items-center justify-between px-4 sm:h-16 sm:px-6">
           <Link href="/" className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-lg font-bold tracking-tight">Cliplift</span>
+            <Logo variant="wordmark" size="md" />
           </Link>
           <nav className="flex items-center gap-3 text-sm sm:gap-6">
             <Link
@@ -40,6 +41,7 @@ export default function MarketingLayout({
             >
               Discover
             </Link>
+            <ThemeToggle />
             <Link
               href="/login"
               className="text-muted-foreground hover:text-foreground"

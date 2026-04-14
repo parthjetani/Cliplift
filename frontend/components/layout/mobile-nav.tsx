@@ -12,10 +12,11 @@ import {
   Send,
   BarChart3,
   Settings,
-  Sparkles,
   Menu,
   X,
 } from "lucide-react";
+
+import { Logo } from "@/components/brand/logo";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -70,7 +71,7 @@ export function MobileNav() {
         {/* Header */}
         <div className="flex h-16 items-center justify-between border-b px-5">
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Logo variant="icon" size="md" />
             <span className="text-lg font-bold tracking-tight">Cliplift</span>
           </div>
           <Button

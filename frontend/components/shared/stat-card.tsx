@@ -35,7 +35,7 @@ export function StatCard({
               <div
                 className={cn(
                   "flex items-center gap-1 text-xs font-medium",
-                  trend === "up" && "text-green-600",
+                  trend === "up" && "text-brand-teal-600",
                   trend === "down" && "text-red-600",
                   trend === "neutral" && "text-muted-foreground"
                 )}

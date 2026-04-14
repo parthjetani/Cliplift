@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" width="720" height="160">
+  <!-- Icon mark (lighter for dark bg) -->
+  <path d="M20 130 L48 104 L76 116 L104 62" fill="none" stroke="#818CF8" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M104 62 L132 28" fill="none" stroke="#14B8A6" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="20" cy="130" r="5" fill="#818CF8" opacity="0.3"/>
+  <circle cx="48" cy="104" r="5.5" fill="#818CF8" opacity="0.45"/>
+  <circle cx="76" cy="116" r="6" fill="#818CF8" opacity="0.65"/>
+  <circle cx="104" cy="62" r="7" fill="#818CF8"/>
+  <circle cx="132" cy="28" r="15" fill="#14B8A6"/>
+  <path d="M127 31 L132 22 L137 31" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M132 22 L132 34" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Wordmark (white for dark bg) -->
+  <text x="168" y="105" font-family="'Inter', 'Segoe UI', -apple-system, sans-serif" font-size="72" font-weight="700" letter-spacing="-2">
+    <tspan fill="#F1F5F9">Clip</tspan><tspan fill="#14B8A6">lift</tspan>
+  </text>
+</svg>

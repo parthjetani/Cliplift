@@ -6,6 +6,7 @@ import { LogOut, User as UserIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { createClient } from "@/lib/supabase/client";
 
 interface HeaderProps {
@@ -34,13 +35,14 @@ export function Header({ email }: HeaderProps) {
         </span>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1 sm:gap-2">
         {email && (
-          <div className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
+          <div className="hidden items-center gap-2 text-sm text-muted-foreground lg:flex">
             <UserIcon className="h-4 w-4" />
             <span className="max-w-[200px] truncate">{email}</span>
           </div>
         )}
+        <ThemeToggle />
         <Button
           variant="ghost"
           size="sm"

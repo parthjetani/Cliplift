@@ -17,16 +17,16 @@ interface TrialBannerProps {
 export function TrialBanner({ trialEndsAt, isTrialExpired }: TrialBannerProps) {
   if (isTrialExpired) {
     return (
-      <div className="border-b border-red-200 bg-red-50 px-4 py-2.5">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-red-800">
-            <Clock className="h-4 w-4" />
+      <div className="border-b border-red-200 bg-red-50 px-4 py-2.5 dark:border-red-900 dark:bg-red-950/50">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="flex items-center gap-2 text-sm text-red-800 dark:text-red-300">
+            <Clock className="h-4 w-4 shrink-0" />
             <span>
               Your trial has ended. Pick a plan to continue tracking and
               publishing.
             </span>
           </div>
-          <Link href="/dashboard/settings/billing">
+          <Link href="/dashboard/settings/billing" className="shrink-0">
             <Button size="sm" variant="destructive">
               Choose a plan
             </Button>
@@ -46,10 +46,10 @@ export function TrialBanner({ trialEndsAt, isTrialExpired }: TrialBannerProps) {
   if (daysLeft > 3) return null;
 
   return (
-    <div className="border-b border-amber-200 bg-amber-50 px-4 py-2.5">
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2 text-sm text-amber-800">
-          <Clock className="h-4 w-4" />
+    <div className="border-b border-amber-200 bg-amber-50 px-4 py-2.5 dark:border-amber-900 dark:bg-amber-950/50">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex items-center gap-2 text-sm text-amber-800 dark:text-amber-300">
+          <Clock className="h-4 w-4 shrink-0" />
           <span>
             {daysLeft === 0
               ? "Your trial ends today."
@@ -57,7 +57,7 @@ export function TrialBanner({ trialEndsAt, isTrialExpired }: TrialBannerProps) {
             {" "}Upgrade to keep full access.
           </span>
         </div>
-        <Link href="/dashboard/settings/billing">
+        <Link href="/dashboard/settings/billing" className="shrink-0">
           <Button size="sm">Upgrade now</Button>
         </Link>
       </div>

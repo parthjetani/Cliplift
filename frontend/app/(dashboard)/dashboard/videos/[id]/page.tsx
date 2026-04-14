@@ -270,7 +270,7 @@ export default function VideoDetailPage() {
                       <span>{formatCompact(s.views)} views</span>
                     )}
                     {s.view_velocity !== null && (
-                      <span className="text-green-600">
+                      <span className="text-brand-teal-600">
                         {formatCompact(s.view_velocity)} views/hr
                       </span>
                     )}

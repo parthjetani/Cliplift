@@ -11,8 +11,9 @@ import {
   Send,
   BarChart3,
   Settings,
-  Sparkles,
 } from "lucide-react";
+
+import { Logo } from "@/components/brand/logo";
 
 import { cn } from "@/lib/utils";
 
@@ -34,7 +35,7 @@ export function Sidebar() {
     <aside className="hidden w-60 shrink-0 flex-col border-r bg-card md:flex">
       {/* Logo */}
       <div className="flex h-16 items-center gap-2 border-b px-6">
-        <Sparkles className="h-5 w-5 text-primary" />
+        <Logo variant="icon" size="md" />
         <span className="text-lg font-bold tracking-tight">Cliplift</span>
       </div>
 

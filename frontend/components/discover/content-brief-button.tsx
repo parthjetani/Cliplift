@@ -34,7 +34,7 @@ export function ContentBriefButton({
   return (
     <>
       <Button
-        variant="secondary"
+        variant="accent"
         size="sm"
         className="mt-2 w-full gap-1 text-xs"
         onClick={(e) => {

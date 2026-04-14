@@ -35,7 +35,7 @@ export function ScheduleResponseButton({
       <Button
         variant="outline"
         size="sm"
-        className="mt-2 w-full gap-1 text-xs"
+        className="mt-2 w-full gap-1 text-xs text-accent"
       >
         <CalendarPlus className="h-3 w-3" />
         Schedule a response

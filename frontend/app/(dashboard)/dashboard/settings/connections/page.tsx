@@ -106,7 +106,7 @@ function ConnectionsContent() {
       />
 
       {justConnected && (
-        <div className="mb-6 flex items-center gap-2 rounded-md border border-green-500/50 bg-green-500/10 p-3 text-sm text-green-700">
+        <div className="mb-6 flex items-center gap-2 rounded-md border border-brand-teal-500/50 bg-brand-teal-500/10 p-3 text-sm text-brand-teal-700">
           <CheckCircle2 className="h-4 w-4" />
           Connection successful.
         </div>

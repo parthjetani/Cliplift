@@ -136,7 +136,7 @@ export function SearchForm({ initialQuery = "" }: SearchFormProps) {
               {results.total} results for &ldquo;{results.query}&rdquo;
             </span>
             {results.outlier_count > 0 && (
-              <span className="text-green-600">
+              <span className="text-brand-teal-600">
                 · {results.outlier_count} outlier{results.outlier_count > 1 ? "s" : ""} detected
               </span>
             )}

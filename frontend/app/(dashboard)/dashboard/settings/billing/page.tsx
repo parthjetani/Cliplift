@@ -14,9 +14,8 @@ import { UsageMeter } from "@/components/billing/usage-meter";
 import { apiAuth, ApiError } from "@/lib/api";
 import type {
   BillingPortalResponse,
-  PaginatedResponse,
+  OverviewResponse,
   TeamResponse,
-  TrackedCreator,
   PlatformConnection,
 } from "@/lib/types";
 
@@ -72,26 +71,15 @@ export default function BillingPage() {
     let cancelled = false;
     (async () => {
       try {
-        const [t, creators, connections] = await Promise.all([
+        const [t, overview, connections] = await Promise.all([
           apiAuth<TeamResponse>("/api/v1/teams/me"),
-          apiAuth<PaginatedResponse<TrackedCreator>>("/api/v1/creators?limit=1"),
+          apiAuth<OverviewResponse>("/api/v1/analytics/overview"),
           apiAuth<PlatformConnection[]>("/api/v1/connections"),
         ]);
         if (cancelled) return;
         setTeam(t);
-        // The paginated response doesn't have a total count, so we read
-        // items.length with a limit of 1 — but we need the real count.
-        // For now, re-fetch with a larger limit to get the count.
-        // TODO: add a /creators/count endpoint or use the overview analytics.
-        const allCreators = await apiAuth<PaginatedResponse<TrackedCreator>>(
-          "/api/v1/creators?limit=100"
-        );
-        if (!cancelled) {
-          setCreatorCount(allCreators.items.length);
-          setConnectionCount(
-            new Set(connections.map((c) => c.platform)).size
-          );
-        }
+        setCreatorCount(overview.tracked_creators);
+        setConnectionCount(new Set(connections.map((c) => c.platform)).size);
       } catch (e) {
         if (!cancelled) {
           setError(e instanceof ApiError ? e.message : "Failed to load billing");

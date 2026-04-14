@@ -231,7 +231,7 @@ export default function CreatorDetailPage() {
               data={timeline.points.filter((p) => p.avg_views_30d !== null)}
               xKey="snapshot_date"
               yKey="avg_views_30d"
-              color="#2563eb"
+              color="#6366F1"
               height={250}
               formatX={formatDate}
               yLabel="Avg views"

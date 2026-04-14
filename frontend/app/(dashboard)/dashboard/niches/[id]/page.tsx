@@ -215,7 +215,7 @@ export default function NicheDetailPage() {
               data={perf.daily}
               xKey="day"
               yKey="videos_discovered"
-              color="#2563eb"
+              color="#6366F1"
               height={200}
               formatX={(d: string) => {
                 const date = new Date(d);

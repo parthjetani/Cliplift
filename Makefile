@@ -1,4 +1,4 @@
-.PHONY: help install dev backend frontend supabase-start supabase-stop migrate db-reset test lint fmt clean worker-publish deploy-checklist
+.PHONY: help install dev backend frontend supabase-start supabase-stop migrate db-reset test lint fmt clean worker-publish worker-creators worker-videos worker-discover worker-analytics deploy-checklist
 
 help: ## Show this help message
 	@echo "Cliplift — available commands:"
@@ -54,9 +54,24 @@ fmt: ## Format backend (ruff) and frontend (prettier)
 	cd frontend && npm run format
 
 worker-publish: ## Manually trigger the publish-scheduled worker (dev only)
+	@$(MAKE) --no-print-directory _worker ENDPOINT=publish-scheduled QS="max_posts=10"
+
+worker-creators: ## Manually trigger the scrape-creators worker (dev only)
+	@$(MAKE) --no-print-directory _worker ENDPOINT=scrape-creators QS="max_age_hours=0"
+
+worker-videos: ## Manually trigger the scrape-videos worker (dev only)
+	@$(MAKE) --no-print-directory _worker ENDPOINT=scrape-videos QS="max_age_hours=0"
+
+worker-discover: ## Manually trigger the discover-trends worker (dev only)
+	@$(MAKE) --no-print-directory _worker ENDPOINT=discover-trends QS="max_age_hours=0"
+
+worker-analytics: ## Manually trigger the collect-analytics worker (dev only)
+	@$(MAKE) --no-print-directory _worker ENDPOINT=collect-analytics QS="max_age_hours=0"
+
+_worker:
 	@cd backend && uv run python -c "from app.config import settings; print(settings.ENCRYPTION_KEY)" | { \
 		read TOKEN; \
-		curl -X POST "http://localhost:8000/api/v1/workers/publish-scheduled?max_posts=10" \
+		curl -X POST "http://localhost:8000/api/v1/workers/$(ENDPOINT)?$(QS)" \
 			-H "X-Dev-Worker-Token: $$TOKEN"; \
 	}
 

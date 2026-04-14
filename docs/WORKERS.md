@@ -24,8 +24,12 @@ All worker routes are gated by `verify_qstash_signature` dependency (`workers/mi
 **Dev mode** (no signing keys configured): Workers accept `X-Dev-Worker-Token` header matching `ENCRYPTION_KEY`:
 
 ```bash
-# Dev trigger via Makefile
+# Dev triggers via Makefile (reads ENCRYPTION_KEY automatically, passes max_age_hours=0)
+make worker-creators
+make worker-videos
+make worker-discover
 make worker-publish
+make worker-analytics
 
 # Manual curl
 curl -X POST http://localhost:8000/api/v1/workers/scrape-creators \
@@ -125,16 +129,16 @@ Collects performance metrics for published posts — closes the "measure the res
 ## Running workers in dev
 
 ```bash
-# Via Makefile (reads ENCRYPTION_KEY automatically)
-make worker-publish
+# Via Makefile — reads ENCRYPTION_KEY automatically, passes max_age_hours=0 (force-process all)
+make worker-creators   # → POST /workers/scrape-creators
+make worker-videos     # → POST /workers/scrape-videos
+make worker-discover   # → POST /workers/discover-trends
+make worker-publish    # → POST /workers/publish-scheduled (max_posts=10)
+make worker-analytics  # → POST /workers/collect-analytics
 
-# Manual curl
+# Manual curl (equivalent)
 TOKEN=$(python -c "from app.config import settings; print(settings.ENCRYPTION_KEY)")
 curl -X POST "http://localhost:8000/api/v1/workers/scrape-creators?max_age_hours=0" \
-  -H "X-Dev-Worker-Token: $TOKEN"
-
-# Force-process all (max_age_hours=0 bypasses the staleness check)
-curl -X POST "http://localhost:8000/api/v1/workers/discover-trends?max_age_hours=0" \
   -H "X-Dev-Worker-Token: $TOKEN"
 ```
 

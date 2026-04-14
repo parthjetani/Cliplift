@@ -232,7 +232,7 @@ export default function VideoDetailPage() {
               data={timeline.points.filter((p) => p.view_velocity !== null)}
               xKey="snapshot_at"
               yKey="view_velocity"
-              color="#16a34a"
+              color="#0D9488"
               height={250}
               formatX={formatTime}
               yLabel="Views/hr"

@@ -51,15 +51,28 @@ Each domain is a self-contained slice with `models.py` (SQLAlchemy), `schemas.py
 ## Frontend layout (`frontend/`)
 
 - Next.js 15 App Router. Route groups: `app/(auth)`, `app/(dashboard)`, `app/(marketing)`.
-- `components/charts/` — generic Recharts wrappers (`line-chart`, `area-chart`, `bar-chart`, `sparkline`, `chart-skeleton`, `chart-empty`). Always reuse these — do not import Recharts directly in pages.
+- `components/brand/` — `logo.tsx` (theme-aware SVG logo component, renders light/dark variants from `public/logo/`).
+- `components/theme/` — `theme-provider.tsx` (next-themes wrapper), `theme-toggle.tsx` (3-state: Light/Dark/System).
+- `components/charts/` — generic Recharts wrappers. Always reuse these — do not import Recharts directly in pages.
 - `components/shared/` — `stat-card`, `date-range-picker`, `empty-state`, `page-header`, `error-boundary`.
 - `components/publishing/` — `upload-dropzone`, `scheduled-post-form`, `post-composer`, `post-status-badge`, `post-list-row`, `content-calendar`.
 - `components/billing/` — `plan-card`, `usage-meter`, `trial-banner`, `trial-banner-wrapper`.
 - `components/marketing/` — `pricing-table` (reused on landing + billing page).
 - `components/discover/` — `search-form`, `video-card`, `outlier-badge`, `content-brief-button`, `content-brief-dialog`, `schedule-response-button`.
-- `components/ui/` — shadcn/ui primitives + `sonner.tsx` toast renderer. Add new ones via `npx shadcn add ...`.
+- `components/ui/` — shadcn/ui primitives + `sonner.tsx` toast renderer. Button has an `accent` variant (teal). Add new primitives via `npx shadcn add ...`.
 - `lib/` — API client (`api.ts` with `apiAuth`, `showApiError`, `uploadFileWithProgress`), Supabase client, types mirroring backend Pydantic schemas (see header comment in `types.ts` for the mapping).
+- `public/` — `favicon.svg`, `favicon-*.png`, `robots.txt`, `logo/` (icon + wordmark SVGs, light + dark).
 - Data fetching: client-side uses `useEffect + apiAuth`. No TanStack Query — deferred.
+
+## Brand design system
+
+- **Primary: Indigo** (`#6366F1` light / `#818CF8` dark) — buttons, links, sidebar active, focus rings.
+- **Accent: Teal** (`#0D9488` light / `#14B8A6` dark) — outlier badges, publish CTAs, "Generate idea", success states.
+- **Destructive: Red** — errors only. Never for branding.
+- **Rule: two brand colors + one semantic red.** No other accents in the UI chrome. Platform icon colors (YouTube red, LinkedIn blue) are the only exceptions.
+- Indigo for navigation/structure. Teal for action/achievement.
+- Dark mode via `next-themes` (class strategy). `ThemeProvider` in root layout. `ThemeToggle` in dashboard header + marketing navbar.
+- Logo: `components/brand/logo.tsx` renders SVGs from `public/logo/` with theme-aware switching. Do NOT use Lucide `Sparkles` as a logo — use the `<Logo>` component.
 
 ## Conventions and gotchas
 

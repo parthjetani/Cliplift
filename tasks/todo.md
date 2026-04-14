@@ -10,6 +10,7 @@ Per `CLAUDE.md` → Task Management: plan here, verify with user, track, then ad
 **Week 3 — Analytics & AI Brief** — ✅ Complete (5/5 chunks).
 **Week 4 — Publishing & Scheduling** — ✅ Complete (5/5 chunks). E2E sweep passed, 3 bugs found + fixed.
 **Week 5 — Billing, Polish & Landing** — ✅ Complete (6/6 chunks). E2E sweep passed, 0 bugs.
+**Brand + Design System** — ✅ Indigo + Teal palette, dark mode, real logo/favicon, green→teal sweep.
 **Documentation** — ✅ 11 comprehensive docs in `docs/`.
 
 | # | Chunk | State | Tests |

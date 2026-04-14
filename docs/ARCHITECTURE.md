@@ -15,6 +15,8 @@
 | File storage | Supabase Storage (prod) / local disk (dev) | Presigned URLs, browser uploads directly |
 | Payments | Stripe (checkout + webhooks) | Mock client when `STRIPE_SECRET_KEY` is empty |
 | AI | Anthropic Claude | Mock client when `ANTHROPIC_API_KEY` is empty |
+| Theming | next-themes (class strategy) | System/light/dark toggle, CSS variable swap |
+| Design system | Indigo #6366F1 + Teal #0D9488 | Brand palette in `globals.css` + `tailwind.config.ts` |
 | Email | Resend | Not yet wired (Week 6) |
 | Monitoring | Sentry | Not yet wired (Week 6) |
 
@@ -45,9 +47,12 @@ frontend/
   app/                   # Next.js 15 App Router
     (auth)/              # Login, register
     (dashboard)/         # All authenticated routes
-    (marketing)/         # Landing page, /compare/virlo, /discover (public)
+    (marketing)/         # Landing page, /compare/virlo, /discover, /blog (public)
   components/            # React components by domain
+    brand/               # Logo component (theme-aware SVG)
+    theme/               # ThemeProvider + ThemeToggle (next-themes)
   lib/                   # API client, Supabase client, types, utils
+  public/                # favicon, robots.txt, logo/ (SVGs + PNGs)
 ```
 
 ## Module pattern

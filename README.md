@@ -18,6 +18,8 @@ Short-form video analytics + publishing tool. The "anti-credit" alternative to V
 
 All external integrations have **mock fallbacks** — the full stack runs end-to-end without any API keys. **299 backend tests passing.**
 
+**Design system:** Indigo primary + Teal accent. Dark mode via `next-themes`. Custom brand logo (icon + wordmark, light/dark variants). Favicon included.
+
 > See [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the full architecture doc.
 
 ---

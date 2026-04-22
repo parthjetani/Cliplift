@@ -19,12 +19,25 @@ class Base(DeclarativeBase):
 
 
 # Async engine
+#
+# `statement_cache_size=0` + `prepared_statement_cache_size=0` are required when
+# running through Supabase's Transaction pooler (Supavisor / pgbouncer in
+# transaction mode). That pooler rotates the underlying backend connection
+# between statements, so per-connection prepared-statement names cached by
+# asyncpg become invalid the next time a different backend is picked —
+# manifests as `InvalidSQLStatementNameError: prepared statement "__asyncpg_stmt_N__"
+# does not exist`. Setting both to 0 is harmless on direct Postgres (local dev)
+# and is Supabase's recommended config for the Transaction pooler.
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=settings.is_development and settings.LOG_LEVEL == "DEBUG",
     pool_pre_ping=True,
     pool_size=5,
     max_overflow=10,
+    connect_args={
+        "statement_cache_size": 0,
+        "prepared_statement_cache_size": 0,
+    },
 )
 
 # Session factory

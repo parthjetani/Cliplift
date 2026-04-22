@@ -115,6 +115,51 @@ Review this file at the start of any new task in this repo.
 
 ---
 
+## Supabase DATABASE_URL: always use Transaction pooler, never the direct URL
+
+**Date:** 2026-04-22
+**Trigger:** Render free-tier backend returned 500s on every authenticated route with `OSError: [Errno 101] Network is unreachable`. I'd told the user to paste Supabase's `DATABASE_URL` into Render without specifying which of the three connection strings to copy — they used the "Direct connection" string (`db.<project>.supabase.co:5432`). That endpoint is **IPv6-only**. Render's free tier has **no IPv6 outbound**. The local migration worked because Windows home networks have IPv6. Production deploy couldn't reach the DB at all.
+**Correction:** Switched Render's `DATABASE_URL` to the **Transaction pooler** (`aws-0-<region>.pooler.supabase.com:6543`), which is IPv4. Connection opened immediately.
+**Rule:** For any Supabase deployment guidance, **always specify the Transaction pooler**, never "the connection string" generically. Supabase exposes three: Direct (`db.<project>.supabase.co:5432`, IPv6-only), Transaction pooler (`:6543`, pool_mode=transaction, IPv4), Session pooler (`:5432` on pooler host, pool_mode=session, IPv4). Most PaaS hosts (Render free/Starter, Railway free, Fly.io without dedicated-ip) lack IPv6 outbound — direct URL always fails. Username format for poolers is `postgres.<PROJECT_REF>`, not just `postgres`. Bake this into any deployment doc or walkthrough.
+
+---
+
+## asyncpg + Supabase Transaction pooler needs `statement_cache_size=0`
+
+**Date:** 2026-04-22
+**Trigger:** After fixing the IPv6 issue, production started returning `InvalidSQLStatementNameError: prepared statement "__asyncpg_stmt_N__" does not exist` on every DB query. Tests all passed locally because local Supabase talks direct Postgres — tests never exercised this path.
+**Correction:** Added `connect_args={"statement_cache_size": 0, "prepared_statement_cache_size": 0}` to `create_async_engine()` in `backend/app/database.py`.
+**Rule:** When SQLAlchemy's asyncpg engine talks to a pgbouncer running in transaction mode (Supabase Transaction pooler, PgBouncer transaction mode, Supavisor transaction mode), **both statement caches must be disabled**. asyncpg caches prepared statement names per connection, but pgbouncer rotates the underlying backend connection between statements, so the cached name is invalid the next time a different backend is picked. Perf cost is negligible (~1-2ms/query). This setting is harmless on direct Postgres, so apply it unconditionally. The other two `connect_args` combos (`{"statement_cache_size": 0}` alone, or `{"prepared_statement_cache_size": 0}` alone) are not sufficient — SQLAlchemy's asyncpg dialect caches separately from asyncpg itself.
+
+---
+
+## asyncpg uses `ssl=require`, not `sslmode=require`
+
+**Date:** 2026-04-22
+**Trigger:** I told the user to append `?sslmode=require` to their Supabase `DATABASE_URL` (copying the psycopg2/libpq convention from the Supabase dashboard's copy-paste sample). Alembic blew up with `TypeError: connect() got an unexpected keyword argument 'sslmode'`.
+**Correction:** Switched to `?ssl=require` for asyncpg URLs.
+**Rule:** SQLAlchemy URL query parameters are forwarded to the underlying DB driver verbatim. psycopg2/psycopg3 accept `sslmode` (libpq convention). **asyncpg does not use libpq** — it's a pure-Python driver — and accepts `ssl=require|true|disable`. Always match the query-string keys to the driver actually specified in the dialect suffix: `postgresql+asyncpg://...?ssl=require`, `postgresql+psycopg2://...?sslmode=require`. Supabase's copy-paste samples assume psycopg2; translate the query params when using asyncpg.
+
+---
+
+## Python gitignores collide with frontend folders — Linux reveals what Windows hides
+
+**Date:** 2026-04-22
+**Trigger:** Vercel build failed with `Module not found: Can't resolve '@/lib/supabase/client'` on fresh clone. Root `.gitignore` (from toptal's Python+Django+Flask generator) has `lib/` under "Distribution / packaging" to ignore Python build artifacts. That rule matches `lib/` **anywhere in the tree** — silently ignoring `frontend/lib/`. Local dev worked because the files existed on disk. `git push` sent an incomplete tree. Vercel cloned and `@/lib/*` imports couldn't resolve.
+**Correction:** Added explicit un-ignore in the Cliplift custom section: `!frontend/lib/` + `!frontend/lib/**`, then `git add frontend/lib/` + push.
+**Rule:** When adding a generated `.gitignore` (toptal, github/gitignore, etc.) from a language ecosystem that's different from other parts of the monorepo, **audit every pattern for basename collisions with real source folders in other languages**. Common collisions: Python's `lib/` vs JS `frontend/lib/` (this one); Python's `build/` vs CRA/webpack `build/`; Python's `dist/` vs bundler outputs; Node's `node_modules` being fine because no one else uses that name. Verify with `for d in <expected source dirs>; do git check-ignore -v "$d"; done` before trusting the gitignore. Case-sensitive Linux CI will eventually catch what Windows dev hides.
+
+---
+
+## Dockerfile `CMD ["uvicorn", ..., "--port", "8000"]` breaks on $PORT-injecting platforms
+
+**Date:** 2026-04-22
+**Trigger:** Deploying `backend/Dockerfile` on Render. Render injects `$PORT` (usually 10000) and expects the app to bind to it. Cliplift's Dockerfile hardcodes `--port 8000`. Result: Render probes its external port → nothing listening on container port 10000 → "No open ports detected." Same issue applies to Railway, Fly.io, Cloud Run, etc.
+**Correction:** Workaround used: set `PORT=8000` as an env var on Render — Render's proxy then routes external traffic → container port 8000, which matches the Dockerfile. Proper fix (deferred): change the Dockerfile `CMD` to use shell form so `$PORT` expands, e.g. `CMD uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}`.
+**Rule:** Any Dockerfile intended to be portable across PaaS hosts must **honor `$PORT`** at runtime, not hardcode a port in the exec-form `CMD`. Exec form (`CMD ["x", "y"]`) does NOT expand env vars — that's a common gotcha. Either use shell form (`CMD uvicorn ... --port ${PORT:-8000}`) or write a small entrypoint script. For Cliplift specifically: the current Dockerfile is Render/Railway-portable **only** with a `PORT=8000` env var workaround. When this bites the next platform switch, do the entrypoint fix.
+
+---
+
 ## `LIMIT N` without `ORDER BY` is a latent bug, not a style preference
 
 **Date:** 2026-04-11

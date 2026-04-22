@@ -36,6 +36,14 @@ make dev                     # Backend :8000, frontend :3000
 |---|---|---|---|
 | `DATABASE_URL` | **yes** | `postgresql+asyncpg://postgres:postgres@127.0.0.1:54322/postgres` | Must use `asyncpg` driver. Local Supabase runs on port 54322. |
 
+**Production notes:**
+
+- Use Supabase's **Transaction pooler** (`aws-0-<region>.pooler.supabase.com:6543`), NOT the direct URL (`db.<project>.supabase.co:5432` — that's IPv6-only, fails on Render/Railway/Fly free tiers which lack IPv6 outbound).
+- Pooler username format is `postgres.<PROJECT_REF>`, not plain `postgres`.
+- SSL param is `ssl=require`, NOT `sslmode=require` (that's psycopg2 syntax; asyncpg rejects it with a `TypeError`).
+- Full production URL shape: `postgresql+asyncpg://postgres.<PROJECT_REF>:<PW>@aws-0-<REGION>.pooler.supabase.com:6543/postgres?ssl=require`
+- The engine in `backend/app/database.py` sets `statement_cache_size=0` + `prepared_statement_cache_size=0` because the Transaction pooler rotates backend connections mid-session and asyncpg's prepared-statement cache becomes invalid. Don't remove these.
+
 ### Supabase Auth
 
 | Variable | Required | Default | Description |

@@ -196,7 +196,7 @@ Every error response follows the same shape:
 | Mock-first everywhere | Full stack runs with `.env` blank. Tests never hit real APIs. |
 | DataProviderRouter over scrapers | Buy data until $5K MRR, swap in scrapers via the same adapter interface |
 | Cursor pagination, not offset | Stable under concurrent inserts/deletes. Uses `(created_at, id)` keyset. |
-| QStash workers, not background processes | Railway auto-sleep compatibility. No persistent worker processes needed. |
+| QStash workers, not background processes | Render/Railway auto-sleep compatibility. No persistent worker processes needed; any PaaS that can handle HTTP requests will do. |
 | Async SQLAlchemy throughout | No sync sessions anywhere. `expire_on_commit=False` on all sessions. |
 | Plan enforcement in route layer | `require_active_plan` dependency, not middleware. GET endpoints bypass it. |
 | Hard cancellation cutoff | `team.plan = "cancelled"` blocks writes, reads stay open. No cancel-trial loophole. |

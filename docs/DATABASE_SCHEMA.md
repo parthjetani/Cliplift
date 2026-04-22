@@ -1,6 +1,6 @@
 # Database Schema
 
-> 13 application tables on PostgreSQL (Supabase). Async SQLAlchemy 2.0, 2 Alembic migrations.
+> 14 application tables on PostgreSQL (Supabase). Async SQLAlchemy 2.0, 3 Alembic migrations. RLS enabled on every public table (backend bypasses via service_role).
 
 ## Connection
 
@@ -290,12 +290,15 @@ auth.users (Supabase)
 
 | File | Revision | Description |
 |---|---|---|
-| `0001_initial.py` | `0001` | All 13 tables, indexes, FK from profiles → auth.users, auto-profile trigger |
+| `0001_initial.py` | `0001` | All 14 tables, indexes, FK from profiles → auth.users, auto-profile trigger |
 | `0002_team_stripe_customer_id_and_trial.py` | `0002` | Adds `teams.stripe_customer_id` + `teams.trial_ends_at`, backfills trial |
+| `0003_enable_rls_on_public_tables.py` | `0003` | Enables RLS on all 14 public tables + `alembic_version` (deny-by-default for PostgREST; backend service_role bypasses) |
 
 Run migrations: `make migrate` (or `cd backend && alembic upgrade head`).
 Create new: `make migrate-create MSG="description"`.
 Reset: `make db-reset` (drops all tables + re-applies).
+
+**RLS rule for new tables:** Any new table added to `public` schema MUST enable RLS in the same migration — Supabase exposes `public` to PostgREST, so unprotected tables become reachable via the anon/authenticated keys. The backend connects as `postgres`/service_role which bypasses RLS, so no policies are needed: RLS-enabled + no-policies = deny-by-default for PostgREST, transparent to the app. Add `op.execute("ALTER TABLE public.<name> ENABLE ROW LEVEL SECURITY")` at the end of `upgrade()`.
 
 ## SQLAlchemy mixins
 

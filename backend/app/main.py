@@ -36,6 +36,22 @@ logging.basicConfig(
 logger = logging.getLogger("cliplift")
 
 
+class _HealthCheckFilter(logging.Filter):
+    """Drop uvicorn access-log lines for /health probes.
+
+    Render pings /health every 5 seconds (not tunable on free/Starter tiers),
+    which floods the log viewer and buries real traffic. The endpoint itself
+    is cheap (no DB hit), so we keep it — just stop logging the probes.
+    """
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        message = record.getMessage()
+        return "/health" not in message
+
+
+logging.getLogger("uvicorn.access").addFilter(_HealthCheckFilter())
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan: startup + shutdown hooks."""
@@ -118,15 +134,15 @@ app.add_middleware(
 register_error_handlers(app)
 
 
-# --- Health check (used by Railway + QStash warm-up pings) ---
+# --- Health check (PaaS liveness probes + QStash warm-up) ---
 @app.get("/health", tags=["system"])
 async def health_check() -> dict[str, str]:
     """Health check endpoint.
 
     Used by:
-    - Railway for liveness probes
-    - QStash to warm up the server before triggering workers (avoids cold start
-      timeout when Railway auto-sleep is enabled)
+    - Render / Railway / Fly.io liveness probes (Render polls every 5s)
+    - QStash to warm up the server before triggering workers (avoids cold-start
+      timeout when the PaaS auto-sleeps)
     """
     return {
         "status": "ok",

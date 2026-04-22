@@ -4,7 +4,7 @@
 
 ## Architecture
 
-Workers are regular FastAPI routes under `/api/v1/workers/`. QStash sends HTTP POST requests on a schedule. Each worker validates the QStash signature, runs its logic, and returns a JSON summary. The server can auto-sleep between triggers (Railway compatibility).
+Workers are regular FastAPI routes under `/api/v1/workers/`. QStash sends HTTP POST requests on a schedule. Each worker validates the QStash signature, runs its logic, and returns a JSON summary. The server can auto-sleep between triggers — but note that Render free tier's 30-60s cold start will exceed QStash's per-request timeout budget. Upgrade to Render Starter ($7/mo) or equivalent always-on tier before enabling cron schedules.
 
 ```
 QStash (Upstash managed)

@@ -84,7 +84,8 @@ Each domain is a self-contained slice with `models.py` (SQLAlchemy), `schemas.py
 - **Plan enforcement.** Write endpoints use `Depends(require_active_plan)` from `billing/enforcement.py` instead of `get_current_team`. This blocks cancelled + trial-expired teams. GET endpoints keep using `get_current_team` (reads stay open).
 - **Auth is Supabase, not custom.** Frontend uses the Supabase JS SDK directly. Backend only validates the JWT. Do not add register/login endpoints to FastAPI.
 - **OAuth tokens are encrypted at rest** via `common/encryption.py`. Never log or return raw tokens. `ENCRYPTION_KEY` must be set in production (empty default — fails fast at startup if missing).
-- **Migrations.** After editing any `models.py`, run `make migrate-create MSG="..."` and review the generated file before committing — autogenerate misses things like enum changes and CHECK constraints. Currently 2 migrations: `0001_initial` (13 tables) + `0002_team_stripe_customer_id_and_trial`.
+- **Migrations.** After editing any `models.py`, run `make migrate-create MSG="..."` and review the generated file before committing — autogenerate misses things like enum changes and CHECK constraints. Currently 3 migrations: `0001_initial` (14 tables) + `0002_team_stripe_customer_id_and_trial` + `0003_enable_rls_on_public_tables`.
+- **RLS on new tables.** Any new table added to the `public` schema MUST have RLS enabled in the same migration: `op.execute("ALTER TABLE public.<name> ENABLE ROW LEVEL SECURITY")`. Supabase exposes `public` to PostgREST; without RLS the table is reachable via the anon/authenticated keys. The FastAPI backend connects as `postgres`/service_role and bypasses RLS, so no policies are needed — RLS-enabled + no-policies = deny-by-default for PostgREST, transparent to the app.
 
 ## Testing
 

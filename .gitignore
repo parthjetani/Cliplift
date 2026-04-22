@@ -511,6 +511,12 @@ pyrightconfig.json
 
 # --- Cliplift custom ---
 
+# The Python distribution-packaging section above ignores `lib/` globally to
+# catch Python build artifacts, but that collides with `frontend/lib/` which
+# holds real source. Un-ignore it explicitly.
+!frontend/lib/
+!frontend/lib/**
+
 # Local dev uploads (Supabase Storage mock)
 uploads/
 
